@@ -9,8 +9,9 @@ const config = {
     // Arcade physics plugin manages physics simulation
     default: 'arcade',
     arcade: {
+      debug: true,
       gravity: {
-        y: 200
+        y: 400
       }
     }
   },
@@ -31,34 +32,32 @@ function preload() {
   this.load.image('bird', 'assets/bird.png');
 }
 
+const STARTING_POSITION_X = config.width / 10;
+const STARTING_POSITION_Y = config.height / 2;
+const VELOCITY = 200;
+const VELOCITY_FLAP = 300;
+
 let bird = null;
 let totalDelta = null;
 
 // Initialize Application
 function create() {
-  //debugger\
-  // x - 400
-  // y - 300
-  // key of the image
-  this.add.image(0, 0, 'sky').setOrigin(0, 0);
-  bird = this.physics.add.sprite(config.width / 10, config.height / 2, 'bird').setOrigin(0, 0);
 
-  //bird.body.gravity.y = 200;
+  this.add.image(0, 0, 'sky').setOrigin(0, 0);
+  
+  bird = this.physics.add.sprite(STARTING_POSITION_X, STARTING_POSITION_Y, 'bird').setOrigin(0, 0);
+
+  this.input.on('pointerdown', flap);
+
+  this.input.keyboard.on('keydown-SPACE', flap);
+
 }
 
-// 60 fps
-// 60 times per second
+function flap() {
+  bird.body.velocity.y = -VELOCITY_FLAP;
+}
+
 function update(time, delta) {
-
-  totalDelta += delta;
-
-  if (totalDelta < 1000) {
-    return;
-  }
-  else if (totalDelta >= 1000) {
-    console.log(bird.body.velocity.y);
-    totalDelta = 0;
-  }
 
 }
 
