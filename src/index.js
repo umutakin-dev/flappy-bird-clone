@@ -32,8 +32,10 @@ function preload() {
   this.load.image('bird', 'assets/bird.png');
 }
 
-const STARTING_POSITION_X = config.width / 10;
-const STARTING_POSITION_Y = config.height / 2;
+const STARTING_POSITION = {
+  X: config.width / 10,
+  Y: config.height / 2
+}
 const VELOCITY = 200;
 const VELOCITY_FLAP = 300;
 
@@ -45,7 +47,7 @@ function create() {
 
   this.add.image(0, 0, 'sky').setOrigin(0, 0);
   
-  bird = this.physics.add.sprite(STARTING_POSITION_X, STARTING_POSITION_Y, 'bird').setOrigin(0, 0);
+  bird = this.physics.add.sprite(STARTING_POSITION.X, STARTING_POSITION.Y, 'bird').setOrigin(0, 0);
 
   this.input.on('pointerdown', flap);
 
@@ -53,12 +55,22 @@ function create() {
 
 }
 
-function flap() {
-  bird.body.velocity.y = -VELOCITY_FLAP;
+// if bird y position is small than 0 or greater than height of the canvas
+// the alert "you have lost"
+function update() {
+  if (bird.y + bird.height > config.height || bird.y < 0) {
+    restartBirdPosition();
+  }
 }
 
-function update(time, delta) {
+function restartBirdPosition() {
+  bird.x = STARTING_POSITION.X;
+  bird.y = STARTING_POSITION.Y;
+  bird.body.velocity.y = 0;
+}
 
+function flap() {
+  bird.body.velocity.y = -VELOCITY_FLAP;
 }
 
 new Phaser.Game(config);
