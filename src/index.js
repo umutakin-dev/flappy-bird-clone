@@ -35,6 +35,7 @@ let lowerPipe = null;
 
 const pipeVerticalDistanceRange = [150, 250];
 let pipeVerticalDistance = Phaser.Math.Between(...pipeVerticalDistanceRange);
+let pipeVerticalPosition = Phaser.Math.Between(20, config.height - 20 - pipeVerticalDistance);
 
 function preload() {
   this.load.image('sky', 'assets/sky.png');
@@ -52,7 +53,7 @@ function create() {
 
   //drawPipe(this, 300, 200);
   //drawPipe(this, 500, 150);
-  upperPipe = this.physics.add.sprite(400, 100, 'pipe').setOrigin(0, 1);
+  upperPipe = this.physics.add.sprite(400, pipeVerticalPosition, 'pipe').setOrigin(0, 1);
   lowerPipe = this.physics.add.sprite(400, upperPipe.y + pipeVerticalDistance, 'pipe').setOrigin(0, 0);
 
   //this.add.image(200, 0, 'pipe').setOrigin(0, 0);
