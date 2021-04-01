@@ -22,17 +22,6 @@ const config = {
   }
 }
 
-// Loading assets, such as images, music, animation, ...
-function preload() {
-  // this context - scene
-  // contains functions and properties we can use
-  //debugger
-
-  this.load.image('sky', 'assets/sky.png');
-  this.load.image('bird', 'assets/bird.png');
-  this.load.image('pipe', 'assets/pipe.png');
-}
-
 const STARTING_POSITION = {
   X: config.width / 10,
   Y: config.height / 2
@@ -43,6 +32,15 @@ const VELOCITY_FLAP = 300;
 let bird = null;
 let upperPipe = null;
 let lowerPipe = null;
+
+const pipeVerticalDistanceRange = [150, 250];
+let pipeVerticalDistance = Phaser.Math.Between(...pipeVerticalDistanceRange);
+
+function preload() {
+  this.load.image('sky', 'assets/sky.png');
+  this.load.image('bird', 'assets/bird.png');
+  this.load.image('pipe', 'assets/pipe.png');
+}
 
 // Initialize Application
 function create() {
@@ -55,7 +53,7 @@ function create() {
   //drawPipe(this, 300, 200);
   //drawPipe(this, 500, 150);
   upperPipe = this.physics.add.sprite(400, 100, 'pipe').setOrigin(0, 1);
-  lowerPipe = this.physics.add.sprite(400, upperPipe.y + 100, 'pipe').setOrigin(0, 0);
+  lowerPipe = this.physics.add.sprite(400, upperPipe.y + pipeVerticalDistance, 'pipe').setOrigin(0, 0);
 
   //this.add.image(200, 0, 'pipe').setOrigin(0, 0);
 
