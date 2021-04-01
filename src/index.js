@@ -31,8 +31,6 @@ const VELOCITY_FLAP = 300;
 const PIPES_TO_RENDER = 4;
 
 let bird = null;
-let upperPipe = null;
-let lowerPipe = null;
 
 let pipeHorizontalDistance = 0;
 
@@ -53,13 +51,10 @@ function create() {
   bird.body.gravity.y = 400;
 
   for (let i = 0; i < PIPES_TO_RENDER; i++) {
-    pipeHorizontalDistance += 400;
-    let pipeVerticalDistance = Phaser.Math.Between(...pipeVerticalDistanceRange);
-    let pipeVerticalPosition = Phaser.Math.Between(20, config.height - 20 - pipeVerticalDistance);
-    upperPipe = this.physics.add.sprite(pipeHorizontalDistance, pipeVerticalPosition, 'pipe').setOrigin(0, 1);
-    lowerPipe = this.physics.add.sprite(upperPipe.x, upperPipe.y + pipeVerticalDistance, 'pipe').setOrigin(0, 0);
+    const upperPipe = this.physics.add.sprite(0, 0, 'pipe').setOrigin(0, 1);
+    const lowerPipe = this.physics.add.sprite(0, 0, 'pipe').setOrigin(0, 0);
 
-    upperPipe.body.velocity.x = lowerPipe.body.velocity.x = -200;
+    placePipe(upperPipe, lowerPipe);
   }
 
   //drawPipe(this, 300, 200);
@@ -91,6 +86,22 @@ function update() {
   if (bird.y + bird.height > config.height || bird.y < 0) {
     restartBirdPosition();
   }
+}
+
+function placePipe(uPipe, lPipe) {
+  pipeHorizontalDistance += 400;
+
+  let pipeVerticalDistance = Phaser.Math.Between(...pipeVerticalDistanceRange);
+  let pipeVerticalPosition = Phaser.Math.Between(20, config.height - 20 - pipeVerticalDistance);
+  
+  uPipe.x = pipeHorizontalDistance;
+  uPipe.y = pipeVerticalDistance;
+
+  lPipe.x = uPipe.x;
+  lPipe.y = uPipe.y + pipeVerticalDistance;
+
+  uPipe.body.velocity.x = 
+  lPipe.body.velocity.x = -200;
 }
 
 function restartBirdPosition() {
