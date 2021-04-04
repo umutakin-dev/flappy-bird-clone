@@ -1,22 +1,26 @@
 import Phaser from 'phaser';
 import PlayScene from './scenes/PlayScene';
 
+const WIDTH = 800;
+const HEIGHT = 600;
+const BIRD_POSITION = {x: WIDTH / 10, y: HEIGHT / 2};
+
+const SHARED_CONFIG = {
+  width: WIDTH,
+  height: HEIGHT,
+  startPosition: BIRD_POSITION
+}
+
 const config = {
-  // WebGL
   type: Phaser.AUTO,
-  width: 800,
-  height: 600,
+  ...SHARED_CONFIG,
   physics: {
-    // Arcade physics plugin manages physics simulation
     default: 'arcade',
     arcade: {
       debug: true,
-      // gravity: {
-      //   y: 400
-      // }
     }
   },
-  scene: [PlayScene]
+  scene: [new PlayScene(SHARED_CONFIG)]
 }
 
 const STARTING_POSITION = {
