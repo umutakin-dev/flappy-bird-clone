@@ -36,11 +36,14 @@ let pipes = null;
 let pipeHorizontalDistance = 0;
 
 const pipeVerticalDistanceRange = [150, 250];
+const pipeHorizontalDistanceRange = [500, 550];
 
 function preload() {
+
   this.load.image('sky', 'assets/sky.png');
   this.load.image('bird', 'assets/bird.png');
   this.load.image('pipe', 'assets/pipe.png');
+
 }
 
 function create() {
@@ -66,40 +69,58 @@ function create() {
 
   this.input.on('pointerdown', flap);
   this.input.keyboard.on('keydown-SPACE', flap);
+
 }
 
 function update() {
+
   if (bird.y + bird.height > config.height || bird.y < 0) {
     restartBirdPosition();
   }
+
 }
 
 function placePipe(uPipe, lPipe) {
-  pipeHorizontalDistance += 400;
-  //pipeHorizontalDistance = getRightMostPipe();
+
+  const rightmostX = getRightMostPipe();
 
   let pipeVerticalDistance = Phaser.Math.Between(...pipeVerticalDistanceRange);
   let pipeVerticalPosition = Phaser.Math.Between(20, config.height - 20 - pipeVerticalDistance);
+  let pipeHorizontalDistance = Phaser.Math.Between(...pipeHorizontalDistanceRange);
   
-  uPipe.x = pipeHorizontalDistance;
-  uPipe.y = pipeVerticalDistance;
+  uPipe.x = rightmostX + pipeHorizontalDistance;
+  uPipe.y = pipeVerticalPosition;
 
   lPipe.x = uPipe.x;
   lPipe.y = uPipe.y + pipeVerticalDistance;
+
 }
 
 function getRightMostPipe() {
+
+  let rightmostX = 0;
   
+  pipes.getChildren().forEach(function(pipe) {
+    rightmostX = Math.max(pipe.x, rightmostX);
+  });
+
+  return rightmostX;
+
 }
 
 function restartBirdPosition() {
+
   bird.x = STARTING_POSITION.X;
   bird.y = STARTING_POSITION.Y;
+  
   bird.body.velocity.y = 0;
+
 }
 
 function flap() {
+
   bird.body.velocity.y = -VELOCITY_FLAP;
+  
 }
 
 new Phaser.Game(config);
