@@ -78,6 +78,8 @@ function update() {
     restartBirdPosition();
   }
 
+  recyclePipes();
+
 }
 
 function placePipe(uPipe, lPipe) {
@@ -95,6 +97,40 @@ function placePipe(uPipe, lPipe) {
   lPipe.y = uPipe.y + pipeVerticalDistance;
 
 }
+
+function recyclePipes() {
+  const tempPipes = [];
+  pipes.getChildren().forEach(pipe => {
+    if (pipe.getBounds().right < 0) {
+      tempPipes.push(pipe);
+      if (tempPipes.length === 2) {
+        placePipe(...tempPipes);
+      }
+    }
+  })
+}
+
+// function recyclePipes() {
+
+//   let upperPipe = null;
+//   let lowerPipe = null;
+
+//   pipes.getChildren().forEach(pipe => {
+//     if (pipe.getBounds().right < 0) {
+//       if (upperPipe === null) {
+//         upperPipe = pipe;
+//       }
+//       else {
+//         lowerPipe = pipe;
+//       }
+//     }
+//   })
+
+//   if (upperPipe !== null || lowerPipe !== null) {
+//     placePipe(upperPipe, lowerPipe);
+//   }
+
+// }
 
 function getRightMostPipe() {
 
@@ -120,7 +156,7 @@ function restartBirdPosition() {
 function flap() {
 
   bird.body.velocity.y = -VELOCITY_FLAP;
-  
+
 }
 
 new Phaser.Game(config);
