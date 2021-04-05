@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import PreloadScene from './scenes/PreloadScene';
 import PlayScene from './scenes/PlayScene';
 import MenuScene from './scenes/MenuScene';
 
@@ -21,8 +22,7 @@ const config = {
       debug: true,
     }
   },
-  scene: [new MenuScene(SHARED_CONFIG), new PlayScene(SHARED_CONFIG)]
-  //scene: [new MenuScene()]
+  scene: [PreloadScene, new MenuScene(SHARED_CONFIG), new PlayScene(SHARED_CONFIG)]
 }
 
 new Phaser.Game(config);

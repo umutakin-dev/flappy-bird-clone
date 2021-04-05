@@ -7,16 +7,10 @@ class MenuScene extends Phaser.Scene {
         this.config = config;
     }
 
-    preload() {
-        this.load.image('sky', 'assets/sky.png');
-    }
-
     create() {
         this.createBG();
-    }
 
-    update() {
-
+        this.scene.start('PlayScene');
     }
 
     createBG() {
