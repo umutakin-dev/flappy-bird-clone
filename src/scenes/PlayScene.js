@@ -112,6 +112,7 @@ class PlayScene extends BaseScene {
         this.pauseButton.on('pointerdown', () => {
             this.physics.pause();
             this.scene.pause();
+            this.scene.launch('PauseScene');
         })
     }
 
