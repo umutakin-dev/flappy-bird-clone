@@ -13,10 +13,30 @@ class BaseScene extends Phaser.Scene {
 
     create() {
         this.createBG();
+
+        this.createBackButton();
     }
 
     createBG() {
         this.add.image(0, 0, 'sky').setOrigin(0, 0);
+    }
+
+    createBackButton() {
+
+        if (this.config.canGoBack) {
+            const backButton = 
+                this.add.image(
+                    this.config.width - 10, 
+                    this.config.height -10, 
+                    'back')
+                    .setInteractive()
+                    .setScale(3)
+                    .setOrigin(1, 1);
+
+            backButton.on('pointerup', () => {
+                this.scene.start('MenuScene');
+            })
+        }
     }
 
     createMenu(menu, setupMenuEvents) {
