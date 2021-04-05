@@ -20,6 +20,8 @@ class PlayScene extends Phaser.Scene {
 
         this.score = 0;
         this.scoreText = '';
+        //this.bestScore = 0;
+        //this.bestScoreText = '';
     }
 
     preload() {
@@ -105,7 +107,9 @@ class PlayScene extends Phaser.Scene {
 
     createScore() {
         this.score = 0;
-        this.scoreText = this.add.text(16, 16, `Score: ${0}`, { fontSize: '32px', fill: '#000'});
+        const bestScore = localStorage.getItem('bestScore');
+        this.scoreText = this.add.text(16, 16, `Score: ${0}`, { fontSize: '24px', fill: '#000'});
+        this.bestScoreText = this.add.text(16, 48, `Best Score: ${bestScore}`, { fontSize: '16px', fill: '#000'});
     }
 
     handleInputs() {
@@ -156,6 +160,7 @@ class PlayScene extends Phaser.Scene {
             if (tempPipes.length === 2) {
               this.placePipe(...tempPipes);
               this.increaseScore();
+              this.saveBestScore();
             }
           }
         })
@@ -173,17 +178,21 @@ class PlayScene extends Phaser.Scene {
         return rightmostX;
         
     }
+
+    saveBestScore() {
+        const bestScoreText = localStorage.getItem('bestScore');
+        const bestScore = bestScoreText && parseInt(bestScoreText, 10);
+        if (!bestScore || this.score >  bestScore) {
+            localStorage.setItem('bestScore', this.score);
+        }
+    }
       
     gameOver() {
-      
-        // this.bird.x = this.config.startPosition.x;
-        // this.bird.y = this.config.startPosition.y;
-        
-        // this.bird.body.velocity.y = 0;
 
         this.physics.pause();
-
         this.bird.setTint(0xff0000);
+
+        this.saveBestScore();
 
         this.time.addEvent({
             delay: 1000,
@@ -204,6 +213,10 @@ class PlayScene extends Phaser.Scene {
     increaseScore() {
         this.score++;
         this.scoreText.setText(`Score: ${this.score}`);
+        if (this.score > this.bestScore) {
+            this.bestScore = this.score;
+            //this.bestScoreText.setText(`Best Score: ${this.bestScore}`);
+        }
     }
 
 }
