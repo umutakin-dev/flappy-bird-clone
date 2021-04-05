@@ -32,11 +32,18 @@ class PauseScene extends BaseScene {
         })
 
         textGO.on('pointerup', () => {
-            // menuItem.scene && this.scene.start(menuItem.scene);
-
-            // if (menuItem.text === 'Exit') {
-            //     this.game.destroy(true);
-            // }
+            if (menuItem.scene) {
+                if (menuItem.text === 'Continue') {
+                    // Shutting down the pause scene and resuming the play scene
+                    this.scene.stop();
+                    this.scene.resume(menuItem.scene);
+                }
+                else {
+                    // Shutting down play scene pause scene and running menu 
+                    this.scene.stop('PlayScene');
+                    this.scene.start(menuItem.scene);
+                }
+            }
         })
     }
 
