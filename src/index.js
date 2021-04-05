@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import PreloadScene from './scenes/PreloadScene';
 import PlayScene from './scenes/PlayScene';
 import MenuScene from './scenes/MenuScene';
+import ScoreScene from './scenes/ScoreScene';
 
 const WIDTH = 800;
 const HEIGHT = 600;
@@ -16,6 +17,7 @@ const SHARED_CONFIG = {
 const Scenes = [
   PreloadScene,
   MenuScene,
+  ScoreScene,
   PlayScene
 ];
 

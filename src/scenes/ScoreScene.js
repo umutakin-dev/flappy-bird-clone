@@ -1,14 +1,13 @@
 import BaseScene from './BaseScene';
 
-class MenuScene extends BaseScene {
+class ScoreScene extends BaseScene {
 
     constructor(config) {
-        super('MenuScene', config);
+        super('ScoreScene', config);
 
         this.menu = [
-            {scene: 'PlayScene', text: 'Play'},
-            {scene: 'ScoreScene', text: 'Score'},
-            {scene: null, text: 'Exit'}
+            {scene: null, text: `Best Score: ${localStorage.getItem('bestScore') || 0}`},
+            {scene: 'MenuScene', text: 'Back'}
         ];
     }
 
@@ -35,12 +34,12 @@ class MenuScene extends BaseScene {
         textGO.on('pointerup', () => {
             menuItem.scene && this.scene.start(menuItem.scene);
 
-            if (menuItem.text === 'Exit') {
-                this.game.destroy(true);
-            }
+            // if (menuItem.text === 'Exit') {
+            //     this.scene.start('MenuScene');
+            // }
         })
     }
 
 }
 
-export default MenuScene;
+export default ScoreScene;
