@@ -11,6 +11,8 @@ class PlayScene extends Phaser.Scene {
         this.bird = null;
         this.pipes = null;
 
+        this.pauseButton = null;
+
         this.pipeHorizontalDistance = 0;
 
         this.pipeVerticalDistanceRange = [150, 250];
@@ -20,8 +22,6 @@ class PlayScene extends Phaser.Scene {
 
         this.score = 0;
         this.scoreText = '';
-        //this.bestScore = 0;
-        //this.bestScoreText = '';
     }
 
     preload() {
@@ -29,6 +29,7 @@ class PlayScene extends Phaser.Scene {
         this.load.image('sky', 'assets/sky.png');
         this.load.image('bird', 'assets/bird.png');
         this.load.image('pipe', 'assets/pipe.png');
+        this.load.image('pause', 'assets/pause.png');
 
     }
 
@@ -39,6 +40,7 @@ class PlayScene extends Phaser.Scene {
         this.createPipes();
         this.createColliders();
         this.createScore();
+        this.createPauseButton();
         this.handleInputs();
 
     }
@@ -112,6 +114,16 @@ class PlayScene extends Phaser.Scene {
         this.bestScoreText = this.add.text(16, 48, `Best Score: ${bestScore}`, { fontSize: '16px', fill: '#000'});
     }
 
+    createPauseButton() {
+        this.pauseButton = 
+            this.add.sprite(
+                this.config.width - 10, 
+                this.config.height -10, 
+                'pause')
+                .setScale(3)
+                .setOrigin(1, 1);
+    }
+
     handleInputs() {
 
         this.input.on('pointerdown', this.flap, this);
@@ -122,7 +134,6 @@ class PlayScene extends Phaser.Scene {
     checkGameStatus() {
         
         if (this.bird.y <= 0 || 
-            //this.bird.y >= this.config.height - this.bird.height ) {
             this.bird.getBounds().bottom >= this.config.height ) {
                 this.gameOver();
         }
@@ -215,7 +226,6 @@ class PlayScene extends Phaser.Scene {
         this.scoreText.setText(`Score: ${this.score}`);
         if (this.score > this.bestScore) {
             this.bestScore = this.score;
-            //this.bestScoreText.setText(`Best Score: ${this.bestScore}`);
         }
     }
 
