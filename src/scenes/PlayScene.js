@@ -1,4 +1,3 @@
-//import Phaser from 'phaser';
 import BaseScene from './BaseScene';
 
 const PIPES_TO_RENDER = 4;
@@ -10,6 +9,9 @@ class PlayScene extends BaseScene {
 
         this.bird = null;
         this.pipes = null;
+        
+        this.isPaused = false;
+        this.isGameOver = false;
 
         this.pauseButton = null;
 
@@ -34,7 +36,6 @@ class PlayScene extends BaseScene {
         this.createPauseButton();
         this.handleInputs();
         this.listenToEvents();
-
     }
 
     update() {
@@ -68,6 +69,7 @@ class PlayScene extends BaseScene {
         this.initialTime--;
         this.countDownText.setText('Fly in: ' + this.initialTime);
         if (this.initialTime <= 0) {
+            this.isPaused = false;
             this.countDownText.setText('');
             this.physics.resume();
             this.timedEvent.remove();
@@ -130,6 +132,7 @@ class PlayScene extends BaseScene {
     }
 
     createPauseButton() {
+        this.isPaused = false;
         this.pauseButton = 
             this.add.image(
                 this.config.width - 10, 
@@ -140,9 +143,12 @@ class PlayScene extends BaseScene {
                 .setOrigin(1, 1);
 
         this.pauseButton.on('pointerdown', () => {
-            this.physics.pause();
-            this.scene.pause();
-            this.scene.launch('PauseScene');
+            if (!this.isGameOver) {
+                this.isPaused = true;
+                this.physics.pause();
+                this.scene.pause();
+                this.scene.launch('PauseScene');
+            }
         })
     }
 
@@ -201,15 +207,11 @@ class PlayScene extends BaseScene {
     }
 
     getRightMostPipe() {
-
         let rightmostX = 0;
-        
         this.pipes.getChildren().forEach(function(pipe) {
             rightmostX = Math.max(pipe.x, rightmostX);
         });
-        
         return rightmostX;
-        
     }
 
     saveBestScore() {
@@ -221,12 +223,10 @@ class PlayScene extends BaseScene {
     }
       
     gameOver() {
-
+        this.isGameOver = true;
         this.physics.pause();
         this.bird.setTint(0xff0000);
-
         this.saveBestScore();
-
         this.time.addEvent({
             delay: 1000,
             callback: () => {
@@ -234,13 +234,11 @@ class PlayScene extends BaseScene {
             },
             loop: false
         })
-
     }
       
     flap() {
-
+        if (this.isPaused) { return; }
         this.bird.body.velocity.y = -this.flapVelocity;
-
     }
 
     increaseScore() {
