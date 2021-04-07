@@ -13,20 +13,34 @@ class PlayScene extends BaseScene {
         this.isPaused = false;
         this.isGameOver = false;
 
-        this.pauseButton = null;
-
         this.pipeHorizontalDistance = 0;
-
-        this.pipeVerticalDistanceRange = [150, 250];
-        this.pipeHorizontalDistanceRange = [500, 550];
-
         this.flapVelocity = 300;
 
         this.score = 0;
         this.scoreText = '';
+
+        this.currentDifficulty = 'easy';
+        this.difficulties = {
+            'easy': {
+                pipeVerticalDistanceRange: [150, 200],
+                pipeHorizontalDistanceRange: [300, 350]
+            },
+            'normal': {
+                pipeVerticalDistanceRange: [140, 190],
+                pipeHorizontalDistanceRange: [280, 330]
+            },
+            'hard': {
+                pipeVerticalDistanceRange: [120, 170],
+                pipeHorizontalDistanceRange: [250, 310]
+            },
+        }
     }
 
     create() {
+
+        this.isGameOver = false;
+        this.currentDifficulty = 'hard';
+
         super.create();
         
         this.createBird();
@@ -34,20 +48,21 @@ class PlayScene extends BaseScene {
         this.createColliders();
         this.createScore();
         this.createPauseButton();
+        
         this.handleInputs();
         this.listenToEvents();
+
     }
 
     update() {
-
         this.checkGameStatus();
-        
         this.recyclePipes();
-
     }
 
     listenToEvents() {
+
         if (this.pauseEvent) { return; }
+        
         this.pauseEvent = this.events.on('resume', () => {
             this.initialTime = 3;
             this.countDownText = 
@@ -63,17 +78,22 @@ class PlayScene extends BaseScene {
                 loop: true
             })
         });
+
     }
 
     countDown() {
+
         this.initialTime--;
+        
         this.countDownText.setText('Fly in: ' + this.initialTime);
+        
         if (this.initialTime <= 0) {
             this.isPaused = false;
             this.countDownText.setText('');
             this.physics.resume();
             this.timedEvent.remove();
         }
+
     }
 
     createBird() {
@@ -165,19 +185,20 @@ class PlayScene extends BaseScene {
             this.bird.getBounds().bottom >= this.config.height ) {
                 this.gameOver();
         }
-
     }
 
     placePipe(uPipe, lPipe) {
 
+        const difficulty = this.difficulties[this.currentDifficulty];
+
         const rightmostX = this.getRightMostPipe();
         
         let pipeVerticalDistance   = 
-          Phaser.Math.Between(...this.pipeVerticalDistanceRange);
+          Phaser.Math.Between(...difficulty.pipeVerticalDistanceRange);
         let pipeVerticalPosition   = 
           Phaser.Math.Between(20, this.config.height - 20 - pipeVerticalDistance);
         let pipeHorizontalDistance = 
-          Phaser.Math.Between(...this.pipeHorizontalDistanceRange);
+          Phaser.Math.Between(...difficulty.pipeHorizontalDistanceRange);
         
         uPipe.x = rightmostX + pipeHorizontalDistance;
         uPipe.y = pipeVerticalPosition;
