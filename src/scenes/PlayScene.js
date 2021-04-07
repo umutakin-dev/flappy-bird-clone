@@ -39,7 +39,7 @@ class PlayScene extends BaseScene {
     create() {
 
         this.isGameOver = false;
-        this.currentDifficulty = 'hard';
+        this.currentDifficulty = 'easy';
 
         super.create();
         
@@ -221,10 +221,21 @@ class PlayScene extends BaseScene {
               this.placePipe(...tempPipes);
               this.increaseScore();
               this.saveBestScore();
+              this.increaseDifficulty();
             }
           }
         })
 
+    }
+
+    increaseDifficulty() {
+        if (this.score === 20) {
+            this.currentDifficulty = 'normal';
+        }
+
+        if (this.score === 40) {
+            this.currentDifficulty = 'hard';
+        }
     }
 
     getRightMostPipe() {
