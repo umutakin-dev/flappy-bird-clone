@@ -116,6 +116,8 @@ class PlayScene extends BaseScene {
             .setScale(3)
             .setOrigin(0, 0);
 
+        this.bird.setBodySize(this.bird.width, this.bird.height - 8)
+
         this.bird.body.gravity.y = 600;
 
         this.bird.setCollideWorldBounds(true);
